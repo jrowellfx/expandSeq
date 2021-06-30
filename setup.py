@@ -1,10 +1,3 @@
-"""A setuptools based setup module.
-See:
-https://packaging.python.org/guides/distributing-packages-using-setuptools/
-https://github.com/pypa/sampleproject
-"""
-
-# Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 import pathlib
 
@@ -44,8 +37,6 @@ setup(
     entry_points={  # Optional
         'console_scripts': [
             'expandseq=expandseq:main',
-        ],
-        'console_scripts': [
             'condenseseq=expandseq:main',
         ],
     },
