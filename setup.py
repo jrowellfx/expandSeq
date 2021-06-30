@@ -29,15 +29,15 @@ setup(
     ],
 
     keywords='vfx, shot-td, image-sequence',
-    package_dir={'': 'src'},
+    package_dir={'', 'src'},
     packages=find_packages(where='src'),
     python_requires='>=3.6, <4',
     install_requires=['seqLister'],
 
     entry_points={  # Optional
         'console_scripts': [
-            'expandseq=expandseq:main',
-            'condenseseq=expandseq:main',
+            'expandseq=expandseq.__main__:main',
+            'condenseseq=expandseq.__main__:main',
         ],
     },
 )
