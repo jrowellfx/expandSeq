@@ -59,7 +59,7 @@ from operator import itemgetter
 import seqLister
 
 EXPAND_MODE = True
-VERSION     = "2.2.2"
+VERSION     = "2.3.0"
 
 def indexNegNumber(argList) :
     i = 0

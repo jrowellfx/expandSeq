@@ -3,3 +3,7 @@
 `expandseq` and `condenseseq`are two unix/linux command-line utilitiies that
 expose the functionality of the python library package `seqLister` to shell users.
 
+## How to install the commands on your system.
+
+python3 -m pip install expandSeq
+
