@@ -1,6 +1,6 @@
 # 3-Clause BSD License
 # 
-# Copyright (c) 2008-2022, James Philip Rowell,
+# Copyright (c) 2008-2023, James Philip Rowell,
 # Alpha Eleven Incorporated
 # www.alpha-eleven.com
 # All rights reserved.
@@ -59,7 +59,7 @@ from operator import itemgetter
 import seqLister
 
 EXPAND_MODE = True
-VERSION     = "2.3.0"
+VERSION     = "2.3.1"
 
 def indexNegNumber(argList) :
     i = 0
@@ -105,14 +105,14 @@ def main():
             integer less than or equal to B. Numbers will only be listed once
             each.  That is; '2-4 1-6' yeilds the list '2 3 4 1 5 6'.
 
-                Helpful hint: To pass negative numbers as an argument enclose them
-                with quotes but include a leading space.
+                Helpful hint: To pass negative numbers to the command use
+                a double-minus '--' to signify the end of OPTIONS.
                 For example:
 
-                    " -12" or " -99-86"
+                    "-- -12" or "-- -99-86",
 
-                Allows you to pass a minus-twelve, or minus-ninety-nine through
-                eighty-six.
+                allows you to pass a minus-twelve, or minus-ninety-nine through
+                eighty-six to the command without it being interpreted as an OPTION.
 
             (Also see condenseseq).
             '''),
@@ -125,14 +125,14 @@ def main():
             'A-B' or 'A-BxN' into the most minimal sequence format possible to
             represent the full list of numbers.
 
-                Helpful hint: To pass negative numbers as an argument enclose them
-                with quotes but include a leading space.
+                Helpful hint: To pass negative numbers to the command use
+                a double-minus '--' to signify the end of OPTIONS.
                 For example:
 
-                    " -12" or " -99-86"
+                    "-- -12" or "-- -99-86",
 
-                Allows you to pass a minus-twelve, or minus-ninety-nine through
-                eighty-six.
+                allows you to pass a minus-twelve, or minus-ninety-nine through
+                eighty-six to the command without it being interpreted as an OPTION.
 
             (Also see expandseq).
             '''),

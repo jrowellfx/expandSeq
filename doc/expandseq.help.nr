@@ -10,16 +10,17 @@ less than or equal to B. Numbers will only be listed once each.
 That is; '2-4 1-6' yeilds the list '2 3 4 1 5 6'. 
 
 .in +4 
-Helpful hint: To pass negative numbers as an argument enclose them with quotes
-but include a leading space.
+Helpful hint: To pass negative numbers to the command use
+a double-minus '--' to signify the end of OPTIONS.
 .br
 For example:
 
 .in +4 
-" -12" or " -99-86"
+"-- -12" or "-- -99-86",
 .in -4 
 
-Allows you to pass a minus-twelve, or minus-ninety-nine through eighty-six.
+allows you to pass a minus-twelve, or minus-ninety-nine through
+eighty-six to the command without it being interpreted as an OPTION.
 .in -4 
 
 (Also see condenseseq).
@@ -35,3 +36,8 @@ possible to represent the full list of numbers.
 INCLUDE HELPFUL HINT HERE AS WELL.
 
 (Also see expandseq).
+
+
+For example:
+
+
