@@ -3,7 +3,7 @@
 --- Test 1 --- expandseq ---
 
 --- Test 2 --- expandseq --version ---
-2.3.0
+2.3.1
 
 --- Test 3 --- expandseq --help ---
 usage: expandseq [OPTION]... [INTEGER SEQUENCE]...
@@ -15,14 +15,14 @@ A-BxN means list every Nth integer starting at A ending at the highest
 integer less than or equal to B. Numbers will only be listed once
 each.  That is; '2-4 1-6' yeilds the list '2 3 4 1 5 6'.
 
-    Helpful hint: To pass negative numbers as an argument enclose them
-    with quotes but include a leading space.
+    Helpful hint: To pass negative numbers to the command use
+    a double-minus '--' to signify the end of OPTIONS.
     For example:
 
-        " -12" or " -99-86"
+        "-- -12" or "-- -99-86",
 
-    Allows you to pass a minus-twelve, or minus-ninety-nine through
-    eighty-six.
+    allows you to pass a minus-twelve, or minus-ninety-nine through
+    eighty-six to the command without them being interpreted as OPTIONs.
 
 (Also see condenseseq).
 
@@ -112,7 +112,7 @@ optional arguments:
 --- Test 28 --- condenseseq ---
 
 --- Test 29 --- condenseseq --version ---
-2.3.0
+2.3.1
 
 --- Test 30 --- condenseseq --help ---
 usage: condenseseq [OPTION]... [INTEGER SEQUENCE]...
@@ -121,14 +121,14 @@ Condenses a list of integers and/or integer sequences of the form
 'A-B' or 'A-BxN' into the most minimal sequence format possible to
 represent the full list of numbers.
 
-    Helpful hint: To pass negative numbers as an argument enclose them
-    with quotes but include a leading space.
+    Helpful hint: To pass negative numbers to the command use
+    a double-minus '--' to signify the end of OPTIONS.
     For example:
 
-        " -12" or " -99-86"
+        "-- -12" or "-- -99 -86",
 
-    Allows you to pass a minus-twelve, or minus-ninety-nine through
-    eighty-six.
+    allows you to pass a minus-twelve, or minus-ninety-nine and
+    minus-eighty-six to the command without them being interpreted as OPTIONs.
 
 (Also see expandseq).
 
