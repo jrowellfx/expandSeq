@@ -9,7 +9,7 @@ python3 -m pip install expandSeq
 
 ## Testing the installation
 
-You should simply be able to run the commands now.
+You should be able to run the following commands and get this output.
 
 ```
 1$ expandseq 1-10

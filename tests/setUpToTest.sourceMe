@@ -1,0 +1,9 @@
+# Assumes that venv has seqLister installed.
+export TEST_DIR=`pwd`
+pushd $HOME
+source venv/bin/activate
+pip install seqLister --upgrade
+popd
+ln -sf ../expandseq/__main__.py expandseq
+ln -sf ../expandseq/__main__.py condenseseq
+export PATH="$TEST_DIR:$PATH"

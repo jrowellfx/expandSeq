@@ -59,6 +59,11 @@ from operator import itemgetter
 import seqLister
 
 EXPAND_MODE = True
+
+# MAJOR version for incompatible API changes
+# MINOR version for added functionality in a backwards compatible manner
+# PATCH version for backwards compatible bug fixes
+#
 VERSION     = "2.3.1"
 
 def indexNegNumber(argList) :
