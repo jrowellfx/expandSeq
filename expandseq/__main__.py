@@ -82,6 +82,8 @@ def main():
             pass
     sys.excepthook = new_hook
 
+    # result = []
+
     global EXPAND_MODE
     if os.path.basename(sys.argv[0]) == "expandseq" :
         EXPAND_MODE = True
@@ -187,9 +189,9 @@ def main():
         result = paddedFrames
     else :
         if args.onlyOnes :
-            result = seqLister.condenseSeqOnes(result, args.pad)
+            result = seqLister.condenseSeqOnes(separateArgs, args.pad, remainingArgs)
         else :
-            result = seqLister.condenseSeq(result, args.pad)
+            result = seqLister.condenseSeq(separateArgs, args.pad, remainingArgs)
 
     if args.reverseList :
         result.reverse()
