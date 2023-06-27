@@ -119,7 +119,7 @@ def main():
                     "-- -12" or "-- -99-86",
 
                 allows you to pass a minus-twelve, or minus-ninety-nine through
-                eighty-six to the command without it being interpreted as an OPTION.
+                eighty-six to the command without them being interpreted as OPTIONs.
 
             (Also see condenseseq).
             '''),
@@ -136,10 +136,10 @@ def main():
                 a double-minus '--' to signify the end of OPTIONS.
                 For example:
 
-                    "-- -12" or "-- -99-86",
+                    "-- -12" or "-- -99 -86",
 
-                allows you to pass a minus-twelve, or minus-ninety-nine through
-                eighty-six to the command without it being interpreted as an OPTION.
+                allows you to pass a minus-twelve, or minus-ninety-nine and
+                minus-eighty-six to the command without them being interpreted as OPTIONs.
 
             (Also see expandseq).
             '''),
