@@ -66,17 +66,7 @@ EXPAND_MODE = True
 # MINOR version for added functionality in a backwards compatible manner
 # PATCH version for backwards compatible bug fixes
 #
-VERSION     = "2.3.1"
-
-def indexNegNumber(argList) :
-    i = 0
-    argLen = len(argList)
-    while i < argLen :
-        if len(argList[i]) >= 2 :
-            if argList[i][0] == '-' and argList[i][1].isdigit() :
-                return i
-        i += 1
-    return -1
+VERSION     = "2.4.0"
 
 def main():
 
@@ -183,14 +173,13 @@ def main():
         for b in a.split(',') :
             separateArgs.append(b)
     remainingArgs = []
-    result = seqLister.expandSeq(separateArgs, remainingArgs)
 
     if EXPAND_MODE :
+        result = seqLister.expandSeq(separateArgs, remainingArgs)
         if args.sortList :
             result.sort()
         # Pad list of integers and turn them into strings before printing.
         #
-        ### jpr debug ### formatStr = "{0:0=-" + str(4) + "d}"
         formatStr = "{0:0=-" + str(args.pad) + "d}"
         paddedFrames = []
         for frame in result:
