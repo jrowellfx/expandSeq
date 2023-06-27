@@ -4,6 +4,15 @@ pushd $HOME
 source venv/bin/activate
 pip install seqLister --upgrade
 popd
-ln -sf ../expandseq/__main__.py expandseq
-ln -sf ../expandseq/__main__.py condenseseq
-export PATH="$TEST_DIR:$PATH"
+
+echo
+echo Run the following lines to make the repo versions
+echo of expandseq and condenseseq the active commands
+echo \(instead of those installed sitewide.\)
+echo
+echo "   " ln -sf ../expandseq/__main__.py expandseq
+echo "   " ln -sf ../expandseq/__main__.py condenseseq
+echo "   " if [[ ! ":$PATH:" == *":$TEST_DIR:"* ]]; then
+echo "       " export PATH="$TEST_DIR:$PATH"
+echo "   " fi
+echo

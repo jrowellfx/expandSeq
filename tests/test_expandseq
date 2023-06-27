@@ -1,5 +1,86 @@
 #!/bin/bash
 
+# 3-Clause BSD License
+#
+# Copyright (c) 2008-2023, James Philip Rowell,
+# Alpha Eleven Incorporated
+# www.alpha-eleven.com
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#
+#  3. Neither the name of the copyright holder, "Alpha Eleven, Inc.",
+#     nor the names of its contributors may be used to endorse or
+#     promote products derived from this software without specific prior
+#     written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT
+# HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# test_expandseq - Run the expandseq regression tests.
+
+usage_exit() {
+    echo "Usage: ${0##*/} [-h | --help] [--testSystem-expandseq]"
+    if [ "$1" = help ]; then
+	cat - <<@eof
+
+${0##*/} Run regression tests on expandseq. Must be run in the
+<expandseq-repository>/tests directory.
+
+Options:
+
+ -h, --help         show this help and exit
+ --testSystem-expandseq run the regression tests on the version of
+                    expandseq installed on the system. Output test
+                    results to appropriatly named file.
+
+@eof
+    fi
+    exit 1
+}
+
+TEST_SYSTEM_EXPANDSEQ=no
+
+#
+# Parse options.  Stop when you get to the file list.
+#
+shopt -s extglob
+while :
+do
+    case "$1" in
+        -h|--help) usage_exit help
+        ;;
+
+        --testSystem-expandseq) TEST_SYSTEM_EXPANDSEQ=yes
+             shift
+        ;;
+
+        --*|-*) usage_exit
+        ;;
+
+        *) break # We're done processing arguments, so let's get on with it. :-)
+    esac
+done
+
 export LC_ALL=POSIX
 
 # !!! This script MUST be run from the 'tests'
@@ -12,17 +93,8 @@ if [[ `basename $TEST_DIR` != 'tests' ]]; then
     exit 1
 fi
 
-### Check lsseq for usage and command line args to test code etc.
-echo wip
-exit
-
-ln -sf ../expandseq/__main__.py expandseq
-export PATH="$TEST_DIR:$PATH"
-
-export REPO_DIR=`dirname $TEST_DIR`
-
-unalias lsseq > /dev/null 2>&1
 unalias expandseq > /dev/null 2>&1
+unalias condenseseq > /dev/null 2>&1
 unalias rm > /dev/null 2>&1
 
 tmpArgs=/tmp/tmpARGS_RENUM.$$
@@ -36,36 +108,24 @@ cleanup() {
 
 trap cleanup INT
 
-# Double check sensible REPO_DIR value before removing old testdir
-#
-if [ -z "$REPO_DIR" ]; then
-    echo $0: error: REPO_DIR was empty, dangerous recursive rm avoided.
-    exit 1
-elif [[ "$REPO_DIR" == "/" ]]; then
-    echo $0: error: REPO_DIR set to root, dangerous recursive rm avoided.
-    exit 1
-elif [[ `basename $REPO_DIR` != 'expandSeq' ]]; then
-    echo $0: error: REPO_DIR might not be set to expandSeq repo, dangerous recursive rm avoided.
-    exit 1
+TEST_OUT_FILENAME=test_expandseq.out.`uname`.new
+
+trap cleanup INT
+
+if [ "$TEST_SYSTEM_EXPANDSEQ" = no ]; then
+    ln -sf ../expandseq/__main__.py  expandseq
+
+    if [[ ! ":$PATH:" == *":$TEST_DIR:"* ]]; then
+        export PATH="$TEST_DIR:$PATH"
+    fi
+else
+    /bin/rm expandseq > /dev/null 2>&1
+    /bin/rm condenseseq > /dev/null 2>&1
+    TEST_OUT_FILENAME=test_expandseq.out.`uname`.installed.new
 fi
-rm -rf $TEST_DIR/testdir/*
 
-# Create list of test directories needed.
-# Then touch the file names to make testfiles.
-# Note: pwd should still be $TEST_DIR
-#
-cat createTestData/create.?Test.files | sed -e '1,$ s/\/[^\/]*$//' | sort -u > $tmpfile
-mkdir -p `cat $tmpfile`
-touch `cat createTestData/create.?Test.files`
-
-# Timestamp the files to be older so that when we renumber
-# them we can use --touch to visually check the results more easily (ls -lt)
-#
-# Note: HAL's birthday from 2001: A Space Odyssey.
-#
-find testdir -type f -exec touch -t 199201121330 \{\} \;
-
-# exit 0
+echo "Test is using " `which expandseq`
+echo "Test is using " `which condenseseq`
 
 # The following are tests. One test per line.
 # The first item on a line is the directory relative to
@@ -74,81 +134,17 @@ find testdir -type f -exec touch -t 199201121330 \{\} \;
 # The rest are args to the command.
 #
 cat << EOF > $tmpArgs
-.   lsseq --version                         # Double check which version being used for this test.
-.   lsseq -RPl --noErrorLists -g -m         # List all sequences in the testdir
-.   expandseq                                # Run with no args - should do nothing
-.   expandseq --version                      # MUST increment with each update/bug fix, corresp w/ release.
-.   expandseq --help                         # To keep track of changes with help, plus check if correct
-.   expandseq      null/foo.jpg              # No args - warning issued -> nothing to do.
-.   expandseq -o 1 null/foo.jpg              # Not a sequence
-.   expandseq -o 1 null/foo.[bar].jpg        # Not a sequence
-.   expandseq -o 1 null/foo.[a-b].jpg        # Not a sequence
-.   expandseq -o 1 null/foo.[-a-b].jpg       # Not a sequence
-.   expandseq -o 1 null/foo.[-a--b].jpg      # Not a sequence
-.   expandseq -o 1 null/foo.[xx-a-b].jpg     # Not a sequence
-.   expandseq -o 1 c01/c.[011--003].jpg c02/c.[11-03].jpg  # Invalid range, [A-B] but A > B
-.   expandseq -s -o 1 null/foo.jpg           # Repeat all those tests but silent
-.   expandseq -s -o 1 null/foo.[bar].jpg     #    ditto
-.   expandseq -s -o 1 null/foo.[a-b].jpg     #    ditto
-.   expandseq -s -o 1 null/foo.[-a-b].jpg    #    ditto
-.   expandseq -s -o 1 null/foo.[-a--b].jpg   #    ditto
-.   expandseq -s -o 1 null/foo.[xx-a-b].jpg  #    ditto
-.   expandseq -s -o 1 c01/c.[011--003].jpg c02/c.[11-03].jpg  # ditto
-a03 lsseq -RPl --noErrorLists -g -m         # Record sequence before renumbering
-a03 expandseq -o 30 a.[0100-0110].jpg        # This should error out
-a03 expandseq -s -o 30 a.[0100-0110].jpg     # Same with this, but silent.
-a03 ls -l                                   # regular ls to see dates of files
-a03 lsseq -RPl --noErrorLists -g -m         # Seq should be the same as above.
-a03 expandseq -v -o 30 --force --touch 200106011230 a.[0100-0110].jpg # Now they should renumber.
-a03 lsseq -RPl --noErrorLists -g -m         # Note new range.
-a03 ls -l                                   # Note that one files was not overwritten due to missing file in renumed seq
-a02 ls -l                                   # This next test was carefully laid out so that the highest x120 goes to x140
-a02 lsseq -RPl --noErrorLists -g -m         # and the lowest x100 goes into the vacated x120 slot. Furthermore x105 is
-a02 expandseq -v -o 20 --touch 200106011230 a.[0100-0120].jpg # missing leaving x0125 untouched after the renum.
-a02 lsseq -RPl --noErrorLists -g -m         # Show new seq range.
-a02 ls -l                                   # Note all were renumbered EXCEPT x125
-a01 ls -l                                   # A list 100-140, 101 missing, 134-139 missing.
-a01 lsseq -RPl --noErrorLists -g -m         # Move them all 100, so should leave 140 unmoved,
-a01 expandseq -o 100 --touch 200106011230 a.[0100-0133].jpg  # and 201 should be missing
-a01 lsseq -RPl --noErrorLists -g -m         # and range should go up to 233. missing 141-199 also.
-a01 ls -l
-.   lsseq -RPl --noErrorLists -g -m b01 x01 y01
-.   expandseq -v -o 100 b01/b.[555].jpg x01/x.[-11--03].jpg y01/y.[-011-0002].jpg
-.   lsseq -RPl --noErrorLists -g -m b01 x01 y01
-.   lsseq -RPl --noErrorLists -g -m a02
-.   expandseq -v -o 10 a02/a.[0120-0140].jpg 
-.   lsseq -RPl --noErrorLists -g -m a02
-.   expandseq -v -o -10 a02/a.[0130-0150].jpg 
-.   lsseq -RPl --noErrorLists -g -m a02
-.   expandseq --verbose -o -1 --pad 3 a02/a.[0120-0140].jpg 
-.   lsseq -RPl --noErrorLists -g -m a02
-.   lsseq -RPl --noErrorLists -g -m d01
-.   expandseq -v -o 20 /d01/d_[0100-0120].jpg
-.   lsseq -RPl --noErrorLists -g -m d01
-.   expandseq -v d01/d_[0120-0140].jpg
-.   expandseq -v --replaceUnderscore d01/d_[0120-0140].jpg
-.   lsseq -RPl --noErrorLists -g -m d01
-e01 lsseq -RPl --noErrorLists -g -m
-e01 expandseq -v --replaceUnderscore e_[5-9999].jpg
-e01 lsseq -RPl --noErrorLists -g -m
-.   expandseq -v --replaceUnderscore --pad 4 e02/e_[5-9999].jpg
-.   expandseq -v --replaceUnderscore --pad 4 e03/e_[5-10005].jpg
-.   lsseq -ZRPl d01
-.   lsseq -ZRPl d02
-.   expandseq -o 20 d02/d.[hi]_[0100-0120].jpg
-.   lsseq -ZRPl d02
-.   expandseq --replaceUnderscore d02/d.[hi]_[0120-0140].jpg
-.   lsseq -ZRPl d02
-.   lsseq -ZRPl f01
-.   expandseq -v --pad 4 f01/f_[05-1005].jpg
-g01 lsseq -n
-g01 expandseq -v -o -400 g.[0530-0547].bgeo.gz
-g01 lsseq -n
+expandseq                                # Run with no args - should do nothing
+expandseq --version                      # MUST increment with each update/bug fix, corresp w/ release.
+expandseq --help                         # To keep track of changes with help, plus check if correct
+condenseseq                              # Run with no args - should do nothing
+condenseseq --version                    # MUST increment with each update/bug fix, corresp w/ release.
+condenseseq --help                       # To keep track of changes with help, plus check if correct
 EOF
 
 export NUM_TESTS=`wc -l < $tmpArgs`
 
-echo ------ Begin Tests ------ > $TEST_DIR/test_expandseq.out.new
+echo ------ Begin Tests ------ > $TEST_DIR/$TEST_OUT_FILENAME
 
 set -f # Turn off globbing
 i=1
@@ -157,19 +153,14 @@ while true; do
     if [ ${#args[@]} -eq 0 ]; then
         break;
     fi
-    workingDir=${args[0]}
-    cmd=${args[1]}
-    args=(${args[@]:2})
-    echo "" >> $TEST_DIR/test_expandseq.out.new
+    cmd=${args[0]}
+    args=(${args[@]:1})
+    echo "" >> $TEST_DIR/$TEST_OUT_FILENAME
     echo --- Test $i of $NUM_TESTS ---
-    echo --- Test $i --- dir:$workingDir --- $cmd ${args[@]} --- >> $TEST_DIR/test_expandseq.out.new
-    cd $TEST_DIR/testdir/$workingDir
-    $cmd ${args[@]} >> $TEST_DIR/test_expandseq.out.new 2>&1
+    echo --- Test $i --- $cmd ${args[@]} --- >> $TEST_DIR/$TEST_OUT_FILENAME
+    $cmd ${args[@]} >> $TEST_DIR/$TEST_OUT_FILENAME 2>&1
     i=$(expr $i + 1)
 done
 set +f # Turn globbing back on
-
-sed -e "1,$ s-$TEST_DIR-/...absPathToRepo.../expandSeq-g" < $TEST_DIR/test_expandseq.out.new > $tmpfile
-expand < $tmpfile | sed -e '1,$ s/ *$//' > $TEST_DIR/test_expandseq.out.new
 
 cleanup

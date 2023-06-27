@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # 3-Clause BSD License
 # 
 # Copyright (c) 2008-2023, James Philip Rowell,
