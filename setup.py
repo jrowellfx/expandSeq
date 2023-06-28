@@ -27,7 +27,7 @@ setup(
 
     packages        = ['expandseq'],
     python_requires = '>=3.6, <4',
-    install_requires=['seqLister'],
+    install_requires=['seqLister>=1.1.0'],
 
     entry_points = {
         'console_scripts': [
