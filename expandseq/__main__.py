@@ -188,6 +188,7 @@ def main():
             paddedFrames.append(formatStr.format(frame))
         result = paddedFrames
     else :
+        # TBD First expand the separateArgs, to get a list of ints, then call condenseSeq()
         if args.onlyOnes :
             result = seqLister.condenseSeqOnes(separateArgs, args.pad, remainingArgs)
         else :
