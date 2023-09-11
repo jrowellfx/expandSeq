@@ -114,7 +114,7 @@ trap cleanup INT
 
 if [ "$TEST_SYSTEM_EXPANDSEQ" = no ]; then
     ln -sf ../expandseq/__main__.py  expandseq
-    ln -sf ../expandseq/__main__.py  condenseseq
+    ln -sf ../condenseseq/__main__.py  condenseseq
 
     if [[ ! ":$PATH:" == *":$TEST_DIR:"* ]]; then
         export PATH="$TEST_DIR:$PATH"

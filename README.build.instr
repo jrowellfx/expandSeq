@@ -11,21 +11,57 @@ cd $HOME
 
 cd <dirWithGitRepos>/expandSeq
 
+# For testing and code-dev
+#
+# Make sure the following shebang is the first line in __main__.py
+# 
+                    #!/usr/bin/env python3
+
+# make sure the VERSION is set properly in {expandseq, condenseseq}/__main__.py, namely
+
+    Given a version number MAJOR.MINOR.PATCH, increment the:
+
+    MAJOR version for incompatible API changes
+    MINOR version for added functionality in a backwards compatible manner
+    PATCH version for backwards compatible bug fixes
+
+# change the version to match in setup.py
+# KEEP expandseq, condenseseq VERSIONS in sync.
+
+cd tests
+source setUpToTest.sourceMe
+#
+# Then proceed with code-dev, testing the command at will.
+
+run the tests - make sure everthing is OK
+    and that the version in test_expandseq.out is updated
+    for BOTH Darwin (MacOS) and Linux.
+
 python3 -m build
 
 # Change next line to whatever latest version is. Then use
 # __token__ and password for PyPi account.
 # ...or not needed if .pypirc is installed in $HOME
 #
-python3 -m twine upload --repository pypi dist/expandSeq-2.3.0*
+# TEST INSTALLATION
+#
+#   python3 -m twine upload --repository testpypi dist/expandseq-x.x.x*
+#
+# or FOR REAL
+python3 -m twine upload --repository pypi dist/expandseq-x.x.x*
 
-# Install it,
+# Install it locally in venv,
+    #
+    # TEST (First one is for test.pypi - second is for non-test dependencies)
+    #
+    # python3 -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ expandSeq
+    #
+    # or the REAL one on pypi
+    #
     python3 -m pip install expandSeq
-# or update it.
-    python3 -m pip install expandSeq --upgrade
 
-# Test installation.
-#
-cd tests
-#
-# Sorry, no tests written yet. TBD.
+# or update it, append '--upgrade' to either of the above lines.
+
+CHECK IN AN COMMIT ALL CHANGES AND PUSH UP TO GITHUB
+
+MAKE NEW RELEASE to match VERSION

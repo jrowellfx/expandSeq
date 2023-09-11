@@ -8,7 +8,8 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name            = 'expandSeq',
-    version         = '2.3.1',
+    version         = '2.4.0',
+    ## version         = '2.4.2', # TEST
     description='Command line utils to expose functionality of seqLister python library.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -25,14 +26,14 @@ setup(
         'Development Status :: 5 - Production/Stable',
     ],
 
-    packages        = ['expandseq'],
+    packages        = ['expandseq', 'condenseseq'],
     python_requires = '>=3.6, <4',
     install_requires=['seqLister>=1.1.0'],
 
     entry_points = {
         'console_scripts': [
             'expandseq = expandseq.__main__:main',
-            'condenseseq = expandseq.__main__:main'
+            'condenseseq = condenseseq.__main__:main'
         ]
     }
 )

@@ -1,5 +1,6 @@
 @eaDir
 build
+deleteMe
 *egg_info*
 *egg-info*
 *.bak

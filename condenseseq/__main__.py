@@ -67,7 +67,7 @@ import seqLister
 VERSION     = "2.4.0"
 ## VERSION     = "2.4.2" ## TEST
 
-PROG_NAME = "condenseseq"
+PROG_NAME = "expandseq"
 
 def main():
 
@@ -86,23 +86,20 @@ def main():
     p = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''\
-        Expands a list of integers and integer sequences of the form 'A-B' or
-        'A-BxN' into a list of integers.
-
-        A-BxN means list every Nth integer starting at A ending at the highest
-        integer less than or equal to B. Numbers will only be listed once
-        each.  That is; '2-4 1-6' yeilds the list '2 3 4 1 5 6'.
+        Condenses a list of integers and/or integer sequences of the form
+        'A-B' or 'A-BxN' into the most minimal sequence format possible to
+        represent the full list of numbers.
 
             Helpful hint: To pass negative numbers to the command use
             a double-minus '--' to signify the end of OPTIONS.
             For example:
 
-                "-- -12" or "-- -99-86",
+                "-- -12" or "-- -99 -86",
 
-            allows you to pass a minus-twelve, or minus-ninety-nine through
-            eighty-six to the command without them being interpreted as OPTIONs.
+            allows you to pass a minus-twelve, or minus-ninety-nine and
+            minus-eighty-six to the command without them being interpreted as OPTIONs.
 
-        (Also see condenseseq).
+        (Also see expandseq).
         '''),
         usage="%(prog)s [OPTION]... [INTEGER SEQUENCE]...")
 
@@ -113,6 +110,9 @@ def main():
         metavar="DELIMITER",
         default="comma",
         help="List successive numbers delimited by a 'comma' (default) or a 'space' or a 'newline'.")
+    p.add_argument("--onlyOnes", action="store_true",
+        dest="onlyOnes", default=False,
+        help="only condense sucessive frames, that is, do not list sequences on 2's, 3's, ... N's")
     p.add_argument("--pad", action="store", type=int,
        dest="pad", default=1,
        metavar="PAD",
@@ -120,9 +120,6 @@ def main():
     p.add_argument("--reverse", "-r", action="store_true",
         dest="reverseList", default=False,
         help="reverse the order of the list")
-    p.add_argument("--sort", "-s", action="store_true",
-        dest="sortList", default=False,
-        help="sort the resulting list")
     p.add_argument("numSequences", metavar="INTEGER SEQUENCE", nargs="*",
         help="is a single integer such as 'A', or a range \
         of integers such as 'A-B' (A or B can be negative,\
@@ -140,16 +137,11 @@ def main():
             separateArgs.append(b)
     remainingArgs = []
 
-    result = seqLister.expandSeq(separateArgs, remainingArgs)
-    if args.sortList :
-        result.sort()
-    # Pad list of integers and turn them into strings before printing.
-    #
-    formatStr = "{0:0=-" + str(args.pad) + "d}"
-    paddedFrames = []
-    for frame in result:
-        paddedFrames.append(formatStr.format(frame))
-    result = paddedFrames
+    # TBD First expand the separateArgs, to get a list of ints, then call condenseSeq()
+    if args.onlyOnes :
+        result = seqLister.condenseSeqOnes(separateArgs, args.pad, remainingArgs)
+    else :
+        result = seqLister.condenseSeq(separateArgs, args.pad, remainingArgs)
 
     if args.reverseList :
         result.reverse()
