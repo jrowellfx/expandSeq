@@ -65,9 +65,8 @@ import seqLister
 # PATCH version for backwards compatible bug fixes
 #
 VERSION     = "2.4.0"
-## VERSION     = "2.4.2" ## TEST
 
-PROG_NAME = "expandseq"
+PROG_NAME = "condenseseq"
 
 def main():
 
@@ -84,23 +83,25 @@ def main():
     sys.excepthook = new_hook
 
     p = argparse.ArgumentParser(
+
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description=textwrap.dedent('''\
-        Condenses a list of integers and/or integer sequences of the form
-        'A-B' or 'A-BxN' into the most minimal sequence format possible to
-        represent the full list of numbers.
+        prog=PROG_NAME,
+        description=textwrap.dedent('''\
+            Condenses a list of integers and/or integer sequences of the form
+            'A-B' or 'A-BxN' into the most minimal sequence format possible to
+            represent the full list of numbers.
 
-            Helpful hint: To pass negative numbers to the command use
-            a double-minus '--' to signify the end of OPTIONS.
-            For example:
+                Helpful hint: To pass negative numbers to the command use
+                a double-minus '--' to signify the end of OPTIONS.
+                For example:
 
-                "-- -12" or "-- -99 -86",
+                    "-- -12" or "-- -99 -86",
 
-            allows you to pass a minus-twelve, or minus-ninety-nine and
-            minus-eighty-six to the command without them being interpreted as OPTIONs.
+                allows you to pass a minus-twelve, or minus-ninety-nine and
+                minus-eighty-six to the command without them being interpreted as OPTIONs.
 
-        (Also see expandseq).
-        '''),
+            (Also see expandseq).
+            '''),
         usage="%(prog)s [OPTION]... [INTEGER SEQUENCE]...")
 
     p.add_argument("--version", action="version", version=VERSION)
