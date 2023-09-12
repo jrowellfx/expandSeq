@@ -144,8 +144,8 @@ def main():
             for c in b.split(' ') :
                 separateArgs.append(c)
     remainingArgs = []
-
     result = seqLister.expandSeq(separateArgs, remainingArgs)
+
     if args.sortList :
         result.sort()
 

@@ -137,12 +137,16 @@ def main():
         for b in a.split(',') :
             separateArgs.append(b)
     remainingArgs = []
+    expandedArgs = seqLister.expandSeq(separateArgs, remainingArgs)
 
-    # TBD First expand the separateArgs, to get a list of ints, then call condenseSeq()
+    # WARNING? if remainingArgs is nonzero length? based on new flag?
+
+    tmp = []
     if args.onlyOnes :
-        result = seqLister.condenseSeqOnes(separateArgs, args.pad, remainingArgs)
+        result = seqLister.condenseSeqOnes(expandedArgs, args.pad, tmp)
+        # tmp should be zero length since expandSeq above should have caught issues.
     else :
-        result = seqLister.condenseSeq(separateArgs, args.pad, remainingArgs)
+        result = seqLister.condenseSeq(expandedArgs, args.pad, tmp)
 
     if args.reverseList :
         result.reverse()
