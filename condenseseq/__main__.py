@@ -36,21 +36,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# expandseq/condenseseq - two command line utilities that expose the basic
-# functionality of the python-module "seqLister.py" functions "expandSeq()"
-# and "condenseSeq()".  These functions translate back and forth between a
-# condensed form for listing sequences of integers and plain lists of integers.
-# Lists of integers in this condensed format are commonly used by various
-# computer programs dealing with sequences of images such as render farm
-# management tools (like smedge), image sequence viewers (like rv) or "ls"
-# commands (like lsseq) to list frames from CG-animation or video footage
-# which has been saved as a sequence of individually numbered frames.
-#
-# The "expandseq" and "condenseseq" commands enhance the simple behavior of
-# the "expandSeq()" and "condenseSeq()" python functions by adding the ability
-# to print out the lists in various forms.  eg.; comma, space or newline
-# separators as well as sorting the lists, reversing order, and mixing and
-# matching expanded and condensed formats as arguments on the command line.
+# expandseq/condenseseq - two command line utilities that expose and
+# expand upon the basic functionality of the python-module "seqLister"
+# functions "expandSeq()" and "condenseSeq()".
 
 import argparse
 import os
@@ -136,9 +124,6 @@ def main():
        dest="pad", default=1,
        metavar="PAD",
        help="set the padding of the frame numbers to be <PAD> digits. [default: 1]")
-    p.add_argument("--reverse", "-r", action="store_true",
-        dest="reverseList", default=False,
-        help="reverse the order of the list")
     p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
         help="See the definition of 'FRAME-RANGE' above.")
 
@@ -155,14 +140,6 @@ def main():
     expandedArgs = seqLister.expandSeq(separateArgs, remainingArgs)
 
     # WARNING? if remainingArgs is nonzero length? based on new flag?
-
-    # Sort the list before passing to condenseq(), as it won't make a difference
-    # to the output, unless the user wants the list reversed, then this will 
-    # create a properly reversed set of FRAME-RANGES.
-    #
-    expandedArgs.sort()
-    if args.reverseList :
-        expandedArgs.reverse()
 
     tmp = []
     if args.onlyOnes :
