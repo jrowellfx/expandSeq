@@ -86,29 +86,49 @@ def main():
         prog=PROG_NAME,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent('''\
-            Expands a list of integers and/or integer sequences (which are
-            of the form 'A-B' or 'A-BxN') into a list of integers.
+            Expands a list of 'Frame-Ranges' into a list of 
+            integers. A 'Frame-Range' is a simple syntax widely
+            used within the VFX-industry for specifying a list
+            of frame numbers for image-sequences.
 
-            'A-B' means list all the integers from A to B inclusive.
+            Definition: Frame-Range
+                Given that 'A', 'B' and 'N' are integers, the
+                syntax for specifying an integer-sequence used
+                to describe a list of frame numbers is one of
+                the following three cases:
 
-            'A-BxN' means list every Nth integer starting at A and ending no
-            larger than B if ascending, or less than B if descending.
+                   'A'     just the integer A.
 
-            Numbers will only be listed once each.  That is, '2-4 1-6'
-            yeilds the list '2 3 4 1 5 6'.
+                   'A-B'   all the integers from A to B inclusive.
 
-                Helpful hint: To pass negative numbers to the command use
-                a double-minus '--' to signify the end of OPTIONS.
-                For example:
+                   'A-BxN' every Nth integer starting at A and increasing
+                           to be no larger than B when A < B, or descending
+                           to be no less than B when A > B.
 
-                    "-- -12" or "-- -99-86",
+            The above three cases may be combined to describe
+            less regular lists of Frame-Ranges by concatenating one
+            Frame-Range after another separated by spaces or commas.
 
-                allows you to pass a minus-twelve, or minus-ninety-nine through
-                eighty-six to the command without them being interpreted as OPTIONs.
+            Example:
+            $ expandseq 2-4 1-6 10
+            2,3,4,1,5,6,10
+
+            Note in the above example that numbers are only listed
+            once each.  That is, once '2-4' is listed, then '1-6' only
+            produces 1, 5 and 6.
+
+            Helpful hint: To pass negative numbers to the command use
+            a double-minus '--' to signify the end of OPTIONS.
+            For example:
+
+                "-- -12" or "-- -99-86",
+
+            allows you to pass a minus-twelve, or minus-ninety-nine through
+            eighty-six to the command without them being interpreted as OPTIONs.
 
             (Also see condenseseq).
             '''),
-        usage="%(prog)s [OPTION]... [INTEGER SEQUENCE]...")
+        usage="%(prog)s [OPTION]... [FRAME-RANGE]...")
 
     p.add_argument("--version", action="version", version=VERSION)
     p.add_argument("--delimiter", "-d", action="store", type=str,
