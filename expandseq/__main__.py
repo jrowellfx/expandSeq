@@ -86,45 +86,44 @@ def main():
         prog=PROG_NAME,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent('''\
-            Expands a list of 'Frame-Ranges' into a list of 
-            integers. A 'Frame-Range' is a simple syntax widely
-            used within the VFX-industry for specifying a list
-            of frame numbers for image-sequences.
+            Expands a list of 'Frame-Ranges' into a list of integers.  A 'Frame-Range'
+            is a simple syntax widely used within the VFX-industry for specifying a
+            list of frame numbers for image-sequences.
 
-            Definition: Frame-Range
-                Given that 'A', 'B' and 'N' are integers, the
-                syntax for specifying an integer-sequence used
-                to describe a list of frame numbers is one of
-                the following three cases:
+            Definition: 'Frame-Range'
+                Given that 'A', 'B' and 'N' are integers, then a 'Frame-Range' is one,
+                or any combination, of the following:
 
-                   'A'     just the integer A.
+                   'A'     the integer A.
 
                    'A-B'   all the integers from A to B inclusive.
 
-                   'A-BxN' every Nth integer starting at A and increasing
-                           to be no larger than B when A < B, or descending
-                           to be no less than B when A > B.
+                   'A-BxN' every Nth integer starting at A and increasing to be no
+                           larger than B when A < B, or decreasing to be no less
+                           than B when A > B.
 
-            The above three cases may be combined to describe
-            less regular lists of Frame-Ranges by concatenating one
-            Frame-Range after another separated by spaces or commas.
+            'Frame-Ranges' may be combined to describe less regular sequences by
+            concatenating one after another separated by spaces or commas.
 
             Example:
             $ expandseq 2-4 1-6 10
             2,3,4,1,5,6,10
 
-            Note in the above example that numbers are only listed
-            once each.  That is, once '2-4' is listed, then '1-6' only
-            produces 1, 5 and 6.
+            Note in the above example that numbers are only listed once each.
+            That is, once '2-4' is listed, then '1-6' only need list 1, 5 and 6.
 
-            Helpful hint: To pass negative numbers to the command use
-            a double-minus '--' to signify the end of OPTIONS.
-            For example:
+            More examples:
+            $ expandseq --delimiter space 1-10x2, 20-60x10
+            1 3 5 7 9 20 30 40 50 60
+            $ expandseq --pad 3 109-91x4
+            109,105,101,097,093
+            $ expandseq -d space --pad 4 -- -99-86x23
+            -099 -076 -053 -030 -007 0016 0039 0062 0085
 
-                "-- -12" or "-- -99-86",
-
-            allows you to pass a minus-twelve, or minus-ninety-nine through
-            eighty-six to the command without them being interpreted as OPTIONs.
+            Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
+            as a command-line OPTION insert a double-minus ('--') before the
+            negative-number, which is a standard technique to deliniate the end
+            of command-line options.
 
             (Also see condenseseq).
             '''),
