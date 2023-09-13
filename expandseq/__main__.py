@@ -123,10 +123,10 @@ def main():
         dest="seqDelimiter",
         metavar="DELIMITER",
         default="space",
-        help="List successive numbers delimited by a 'comma', 'space' (default) or a 'newline'.")
+        help="List successive numbers delimited by a 'comma',\
+            'space' (default) or a 'newline'.")
     p.add_argument("--pad", action="store", type=int,
-       dest="pad", default=1,
-       metavar="PAD",
+       dest="pad", default=1, metavar="PAD",
        help="set the padding of the frame numbers to be <PAD> digits. [default: 1]")
     p.add_argument("--reverse", "-r", action="store_true",
         dest="reverseList", default=False,
@@ -134,6 +134,18 @@ def main():
     p.add_argument("--sort", "-s", action="store_true",
         dest="sortList", default=False,
         help="sort the resulting list")
+
+    p.add_argument("--error", action="store_true",
+        dest="exitOnError", default=True,
+        help="exit with error if FRAME-RANGE is invalid" )
+    p.add_argument("--noError", action="store_false",
+        dest="exitOnError",
+        help="skip invalid FRAME-RANGEs, but print warning" )
+
+    p.add_argument("--silent", "--quiet", action="store_true",
+        dest="silent", default=False,
+        help="suppress all errors and warnings")
+
     p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
         help="See the definition of 'FRAME-RANGE' above.")
 
@@ -149,6 +161,44 @@ def main():
                 separateArgs.append(c)
     remainingArgs = []
     result = seqLister.expandSeq(separateArgs, remainingArgs)
+
+    # Check for any invalid FRAME-RANGEs, and respond according to
+    # flags set with OPTIONS. Only show up to 3 bad FRAME-RANGES,
+    # chop any after that and append an 'etc.' note to the warning
+    # or error message.
+    #
+    badArgsLength = len(remainingArgs)
+    if badArgsLength > 0 :
+
+        badArgsEtcLength = badArgsLength
+        if badArgsLength > 3 :
+            badArgsEtcLength = 3
+
+        plural = ''
+        count = ''
+        if badArgsLength > 1 :
+            plural = 's'
+            count = str(badArgsLength) + ' '
+
+        badFramesMessage = count \
+            + 'invalid FRAME-RANGE' \
+            + plural + ': ' \
+            + ', '.join(remainingArgs[:badArgsEtcLength])
+
+        if badArgsLength > 3 :
+            badFramesMessage += ', ... etc.'
+
+        if args.exitOnError :
+            if not args.silent :
+                print(PROG_NAME,
+                    ": error: ", badFramesMessage,
+                    file=sys.stderr, sep='')
+            sys.exit(1)
+        else :
+            if not args.silent :
+                print(PROG_NAME,
+                    ": warning: ", badFramesMessage,
+                    file=sys.stderr, sep='')
 
     if args.sortList :
         result.sort()
