@@ -135,6 +135,7 @@ echo "Test is using " `which condenseseq`
 # The rest are args to the command.
 #
 cat << EOF > $tmpArgs
+uname
 expandseq                                # Run with no args - should do nothing
 expandseq --version                      # MUST increment with each update/bug fix, corresp w/ release.
 expandseq --help                         # To keep track of changes with help, plus check if correct
