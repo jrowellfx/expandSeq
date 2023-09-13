@@ -36,21 +36,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# expandseq/condenseseq - two command line utilities that expose the basic
-# functionality of the python-module "seqLister.py" functions "expandSeq()"
-# and "condenseSeq()".  These functions translate back and forth between a
-# condensed form for listing sequences of integers and plain lists of integers.
-# Lists of integers in this condensed format are commonly used by various
-# computer programs dealing with sequences of images such as render farm
-# management tools (like smedge), image sequence viewers (like rv) or "ls"
-# commands (like lsseq) to list frames from CG-animation or video footage
-# which has been saved as a sequence of individually numbered frames.
-#
-# The "expandseq" and "condenseseq" commands enhance the simple behavior of
-# the "expandSeq()" and "condenseSeq()" python functions by adding the ability
-# to print out the lists in various forms.  eg.; comma, space or newline
-# separators as well as sorting the lists, reversing order, and mixing and
-# matching expanded and condensed formats as arguments on the command line.
+# expandseq/condenseseq - two command line utilities that expose and
+# expand upon the basic functionality of the python-module "seqLister"
+# functions "expandSeq()" and "condenseSeq()".
 
 import argparse
 import os
@@ -86,12 +74,12 @@ def main():
         prog=PROG_NAME,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent('''\
-            Expands a list of 'Frame-Ranges' into a list of integers.  A 'Frame-Range'
+            Expands a list of FRAME-RANGEs into a list of integers.  A FRAME-RANGE
             is a simple syntax widely used within the VFX-industry for specifying a
-            list of frame numbers for image-sequences.
+            list of frame-numbers for image-sequences.
 
-            Definition: 'Frame-Range'
-                Given that 'A', 'B' and 'N' are integers, then a 'Frame-Range' is one,
+            Definition: FRAME-RANGE
+                Given that 'A', 'B' and 'N' are integers, then a FRAME-RANGE is one,
                 or any combination, of the following:
 
                    'A'     the integer A.
@@ -102,23 +90,23 @@ def main():
                            larger than B when A < B, or decreasing to be no less
                            than B when A > B.
 
-            'Frame-Ranges' may be combined to describe less regular sequences by
+            FRAME-RANGEs may be combined to describe less regular sequences by
             concatenating one after another separated by spaces or commas.
 
             Example:
-            $ expandseq 2-4 1-6 10
-            2 3 4 1 5 6 10
+                $ expandseq 2-4 1-6 10
+                2 3 4 1 5 6 10
 
             Note in the above example that numbers are only listed once each.
             That is, once '2-4' is listed, then '1-6' only need list 1, 5 and 6.
 
             More examples:
-            $ expandseq 1-10x2, 20-60x10
-            1 3 5 7 9 20 30 40 50 60
-            $ expandseq --pad 3 109-91x4
-            109 105 101 097 093
-            $ expandseq --pad 4 -- -99-86x23
-            -099 -076 -053 -030 -007 0016 0039 0062 0085
+                $ expandseq 1-10x2, 20-60x10
+                1 3 5 7 9 20 30 40 50 60
+                $ expandseq --pad 3 109-91x4
+                109 105 101 097 093
+                $ expandseq --pad 4 -- -99-86x23
+                -099 -076 -053 -030 -007 0016 0039 0062 0085
 
             Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
             as a command-line OPTION insert a double-minus ('--') before the

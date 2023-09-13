@@ -75,11 +75,11 @@ def main():
     formatter_class=argparse.RawDescriptionHelpFormatter,
         prog=PROG_NAME,
         description=textwrap.dedent('''\
-            Given a list of 'Frame-Ranges' condense the fully expanded list into
-            the most succinct list of 'Frame-Ranges' possible.
+            Given a list of FRAME-RANGEs condense the fully expanded list into
+            the most succinct list of FRAME-RANGEs possible.
 
-            Definition: 'Frame-Range'
-                Given that 'A', 'B' and 'N' are integers, then a 'Frame-Range' is one,
+            Definition: FRAME-RANGE
+                Given that 'A', 'B' and 'N' are integers, then a FRAME-RANGE is one,
                 or any combination, of the following:
 
                    'A'     the integer A.
@@ -90,16 +90,16 @@ def main():
                            larger than B when A < B, or decreasing to be no less
                            than B when A > B.
 
-            'Frame-Ranges' may be combined to describe less regular sequences by
+            FRAME-RANGEs may be combined to describe less regular sequences by
             concatenating one after another separated by spaces or commas.
 
             Examples:
-            $ condenseseq 1-100x2 2-100x2
-            1-100
-            $ condenseseq 0-100x2 51
-            0-50x2 51 52-100x2
-            $ condenseseq --pad 3 49 0-100x2 51 53
-            000-048x2 049-053 054-100x2
+                $ condenseseq 1-100x2 2-100x2
+                1-100
+                $ condenseseq 0-100x2 51
+                0-50x2 51 52-100x2
+                $ condenseseq --pad 3 49 0-100x2 51 53
+                000-048x2 049-053 054-100x2
 
             Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
             as a command-line OPTION insert a double-minus ('--') before the
