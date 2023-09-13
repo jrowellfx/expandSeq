@@ -64,7 +64,7 @@ import seqLister
 # MINOR version for added functionality in a backwards compatible manner
 # PATCH version for backwards compatible bug fixes
 #
-VERSION     = "2.4.0"
+VERSION     = "3.0.0"
 
 PROG_NAME = "expandseq"
 
@@ -107,17 +107,17 @@ def main():
 
             Example:
             $ expandseq 2-4 1-6 10
-            2,3,4,1,5,6,10
+            2 3 4 1 5 6 10
 
             Note in the above example that numbers are only listed once each.
             That is, once '2-4' is listed, then '1-6' only need list 1, 5 and 6.
 
             More examples:
-            $ expandseq --delimiter space 1-10x2, 20-60x10
+            $ expandseq 1-10x2, 20-60x10
             1 3 5 7 9 20 30 40 50 60
             $ expandseq --pad 3 109-91x4
-            109,105,101,097,093
-            $ expandseq -d space --pad 4 -- -99-86x23
+            109 105 101 097 093
+            $ expandseq --pad 4 -- -99-86x23
             -099 -076 -053 -030 -007 0016 0039 0062 0085
 
             Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
@@ -134,8 +134,8 @@ def main():
         choices=("comma", "space", "newline"),
         dest="seqDelimiter",
         metavar="DELIMITER",
-        default="comma",
-        help="List successive numbers delimited by a 'comma' (default) or a 'space' or a 'newline'.")
+        default="space",
+        help="List successive numbers delimited by a 'comma', 'space' (default) or a 'newline'.")
     p.add_argument("--pad", action="store", type=int,
        dest="pad", default=1,
        metavar="PAD",
@@ -146,11 +146,8 @@ def main():
     p.add_argument("--sort", "-s", action="store_true",
         dest="sortList", default=False,
         help="sort the resulting list")
-    p.add_argument("numSequences", metavar="INTEGER SEQUENCE", nargs="*",
-        help="is a single integer such as 'A', or a range \
-        of integers such as 'A-B' (A or B can be negative,\
-        and A may be greater than B to count backwards), or \
-        a range on N's such as 'A-BxN' where N is a positive integer.")
+    p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
+        help="See the definition of 'FRAME-RANGE' above.")
 
     # Copy the command line args (except prog name) and convert
     # commas into spaces thus making more args.

@@ -64,7 +64,7 @@ import seqLister
 # MINOR version for added functionality in a backwards compatible manner
 # PATCH version for backwards compatible bug fixes
 #
-VERSION     = "2.4.0"
+VERSION     = "3.0.0"
 
 PROG_NAME = "condenseseq"
 
@@ -87,30 +87,48 @@ def main():
     formatter_class=argparse.RawDescriptionHelpFormatter,
         prog=PROG_NAME,
         description=textwrap.dedent('''\
-            Condenses a list of integers and/or integer sequences of the form
-            'A-B' or 'A-BxN' into the most minimal sequence format possible to
-            represent the full list of numbers.
+            Given a list of 'Frame-Ranges' condense the fully expanded list into
+            the most succinct list of 'Frame-Ranges' possible.
 
-                Helpful hint: To pass negative numbers to the command use
-                a double-minus '--' to signify the end of OPTIONS.
-                For example:
+            Definition: 'Frame-Range'
+                Given that 'A', 'B' and 'N' are integers, then a 'Frame-Range' is one,
+                or any combination, of the following:
 
-                    "-- -12" or "-- -99 -86",
+                   'A'     the integer A.
 
-                allows you to pass a minus-twelve, or minus-ninety-nine and
-                minus-eighty-six to the command without them being interpreted as OPTIONs.
+                   'A-B'   all the integers from A to B inclusive.
+
+                   'A-BxN' every Nth integer starting at A and increasing to be no
+                           larger than B when A < B, or decreasing to be no less
+                           than B when A > B.
+
+            'Frame-Ranges' may be combined to describe less regular sequences by
+            concatenating one after another separated by spaces or commas.
+
+            Examples:
+            $ condenseseq 1-100x2 2-100x2
+            1-100
+            $ condenseseq 0-100x2 51
+            0-50x2 51 52-100x2
+            $ condenseseq --pad 3 49 0-100x2 51 53
+            000-048x2 049-053 054-100x2
+
+            Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
+            as a command-line OPTION insert a double-minus ('--') before the
+            negative-number, which is a standard technique to deliniate the end
+            of command-line options.
 
             (Also see expandseq).
             '''),
-        usage="%(prog)s [OPTION]... [INTEGER SEQUENCE]...")
+        usage="%(prog)s [OPTION]... [FRAME-RANGE]...")
 
     p.add_argument("--version", action="version", version=VERSION)
     p.add_argument("--delimiter", "-d", action="store", type=str,
         choices=("comma", "space", "newline"),
         dest="seqDelimiter",
         metavar="DELIMITER",
-        default="comma",
-        help="List successive numbers delimited by a 'comma' (default) or a 'space' or a 'newline'.")
+        default="space",
+        help="List successive numbers delimited by a 'comma', 'space' (default) or a 'newline'.")
     p.add_argument("--onlyOnes", action="store_true",
         dest="onlyOnes", default=False,
         help="only condense sucessive frames, that is, do not list sequences on 2's, 3's, ... N's")
@@ -121,11 +139,8 @@ def main():
     p.add_argument("--reverse", "-r", action="store_true",
         dest="reverseList", default=False,
         help="reverse the order of the list")
-    p.add_argument("numSequences", metavar="INTEGER SEQUENCE", nargs="*",
-        help="is a single integer such as 'A', or a range \
-        of integers such as 'A-B' (A or B can be negative,\
-        and A may be greater than B to count backwards), or \
-        a range on N's such as 'A-BxN' where N is a positive integer.")
+    p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
+        help="See the definition of 'FRAME-RANGE' above.")
 
     # Copy the command line args (except prog name) and convert
     # commas into spaces thus making more args.
@@ -141,15 +156,20 @@ def main():
 
     # WARNING? if remainingArgs is nonzero length? based on new flag?
 
+    # Sort the list before passing to condenseq(), as it won't make a difference
+    # to the output, unless the user wants the list reversed, then this will 
+    # create a properly reversed set of FRAME-RANGES.
+    #
+    expandedArgs.sort()
+    if args.reverseList :
+        expandedArgs.reverse()
+
     tmp = []
     if args.onlyOnes :
         result = seqLister.condenseSeqOnes(expandedArgs, args.pad, tmp)
         # tmp should be zero length since expandSeq above should have caught issues.
     else :
         result = seqLister.condenseSeq(expandedArgs, args.pad, tmp)
-
-    if args.reverseList :
-        result.reverse()
 
     isFirst = True
     for s in result :
