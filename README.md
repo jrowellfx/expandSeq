@@ -45,9 +45,6 @@ expandseq [OPTION]... [FRAME-RANGE]...
 
 Expands a list of FRAME-RANGEs into a list of integers.
 
-FRAME-RANGEs may be combined to describe less regular sequences by
-concatenating one after another separated by spaces or commas.
-
 Example:
     $ expandseq 2-4 1-6 10
     2 3 4 1 5 6 10
