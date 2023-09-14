@@ -137,7 +137,7 @@ def main():
 
     p.add_argument("--error", action="store_true",
         dest="exitOnError", default=True,
-        help="exit with error if FRAME-RANGE is invalid" )
+        help="exit with error if FRAME-RANGE is invalid. (default)" )
     p.add_argument("--noError", action="store_false",
         dest="exitOnError",
         help="skip invalid FRAME-RANGEs, but print warning" )
@@ -149,15 +149,15 @@ def main():
     p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
         help="See the definition of 'FRAME-RANGE' above.")
 
-    # Copy the command line args (except prog name) and convert
-    # commas into spaces thus making more args.
-    #
     args = p.parse_args()
 
+    # Copy the command line args converting commas into spaces and then
+    # splitting along ALL whitespace possibly generating more args.
+    #
     separateArgs = []
     for a in args.numSequences :
         for b in a.split(',') :
-            for c in b.split(' ') :
+            for c in b.split() :
                 separateArgs.append(c)
     remainingArgs = []
     result = seqLister.expandSeq(separateArgs, remainingArgs)

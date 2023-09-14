@@ -124,29 +124,100 @@ def main():
        dest="pad", default=1,
        metavar="PAD",
        help="set the padding of the frame numbers to be <PAD> digits. [default: 1]")
+
+    p.add_argument("--error", action="store_true",
+        dest="exitOnError", default=True,
+        help="exit with error if FRAME-RANGE is invalid. (default)" )
+    p.add_argument("--noError", action="store_false",
+        dest="exitOnError",
+        help="skip invalid FRAME-RANGEs, but print warning" )
+
+    p.add_argument("--silent", "--quiet", action="store_true",
+        dest="silent", default=False,
+        help="suppress all errors and warnings")
+
     p.add_argument("numSequences", metavar="FRAME-RANGE", nargs="*",
         help="See the definition of 'FRAME-RANGE' above.")
 
-    # Copy the command line args (except prog name) and convert
-    # commas into spaces thus making more args.
-    #
     args = p.parse_args()
 
+    # Copy the command line args converting commas into spaces and then 
+    # splitting along ALL whitespace possibly generating more args.
+    #
     separateArgs = []
     for a in args.numSequences :
         for b in a.split(',') :
-            separateArgs.append(b)
+            for c in b.split() :
+                separateArgs.append(c)
     remainingArgs = []
+
+    # Now fully expand all the FRAME-RANGES supplied to get a FULL set of frame
+    # numbers before condensing the full list.
+    #
     expandedArgs = seqLister.expandSeq(separateArgs, remainingArgs)
 
-    # WARNING? if remainingArgs is nonzero length? based on new flag?
+    # Any non-FRAME-RANGES, should have been caught at this point, so we can
+    # process the possible errors and warnings now. Same code as expandSeq command.
+    #
+    # Check for any invalid FRAME-RANGEs, and respond according to
+    # flags set with OPTIONS. Only show up to 3 bad FRAME-RANGES,
+    # chop any after that and append an 'etc.' note to the warning
+    # or error message.
+    #
+    badArgsLength = len(remainingArgs)
+    if badArgsLength > 0 :
 
-    tmp = []
+        badArgsEtcLength = badArgsLength
+        if badArgsLength > 3 :
+            badArgsEtcLength = 3
+
+        plural = ''
+        count = ''
+        if badArgsLength > 1 :
+            plural = 's'
+            count = str(badArgsLength) + ' '
+
+        badFramesMessage = count \
+            + 'invalid FRAME-RANGE' \
+            + plural + ': ' \
+            + ', '.join(remainingArgs[:badArgsEtcLength])
+
+        if badArgsLength > 3 :
+            badFramesMessage += ', ... etc.'
+
+        if args.exitOnError :
+            if not args.silent :
+                print(PROG_NAME,
+                    ": error: ", badFramesMessage,
+                    file=sys.stderr, sep='')
+            sys.exit(1)
+        else :
+            if not args.silent :
+                print(PROG_NAME,
+                    ": warning: ", badFramesMessage,
+                    file=sys.stderr, sep='')
+
+    tmpList = []
     if args.onlyOnes :
-        result = seqLister.condenseSeqOnes(expandedArgs, args.pad, tmp)
-        # tmp should be zero length since expandSeq above should have caught issues.
+        result = seqLister.condenseSeqOnes(expandedArgs, args.pad, tmpList)
+
+        # tmpList should be zero length since expandSeq() call above should
+        # have caught all the issues with badly formed FRAME-RANGEs.
+        #
+        if len(tmpList) > 0 and not args.silent :
+            print(PROG_NAME,
+                ": ASSERT FAILURE: call to seqLister.condenseSeqOnes() returned non-zero length nonSeqList.",
+                file=sys.stderr, sep='')
     else :
-        result = seqLister.condenseSeq(expandedArgs, args.pad, tmp)
+        result = seqLister.condenseSeq(expandedArgs, args.pad, tmpList)
+
+        # tmpList should be zero length since expandSeq() call above should
+        # have caught all the issues with badly formed FRAME-RANGEs.
+        #
+        if len(tmpList) > 0 and not args.silent :
+            print(PROG_NAME,
+                ": ASSERT FAILURE: call to seqLister.condenseSeq() returned non-zero length nonSeqList.",
+                file=sys.stderr, sep='')
 
     isFirst = True
     for s in result :
