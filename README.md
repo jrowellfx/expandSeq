@@ -1,7 +1,27 @@
 # About expandseq and consdenseseq
 
-`expandseq` and `condenseseq`are two unix/linux command-line utilitiies that
-expose the functionality of the python library package `seqLister` to shell users.
+`expandseq` and `condenseseq` are two unix/linux command-line utilitiies 
+for expanding and condensing
+integer-sequences using a simple syntax widely used within
+the VFX-industry for specifying frame-ranges.
+
+## Definition: 'Frame-Range'.
+
+Given that 'A', 'B' and 'N' are integers, the syntax
+for specifying an integer sequence used to describe
+frame-ranges is one of the following three cases:
+
+1. 'A' : just the integer A.
+
+2. 'A-B' : all the integers from A to B inclusive.
+
+3. 'A-BxN' : every Nth integer starting at A and increasing
+to be no larger than B when A < B, or descending
+to be no less than B when A > B.
+
+The above three cases may often be combined to describe
+less regular lists of Frame-Ranges by concatenating one
+Frame-Range after another separated by spaces or commas.
 
 ## Installing the commands
 
