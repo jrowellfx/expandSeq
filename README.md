@@ -82,3 +82,43 @@ optional arguments:
   --noError             skip invalid FRAME-RANGEs, but print warning
   --silent, --quiet     suppress all errors and warnings
 ```
+
+## condenseseq
+
+```
+condenseseq [OPTION]... [FRAME-RANGE]...
+
+Given a list of FRAME-RANGEs condense the fully expanded list into
+the most succinct list of FRAME-RANGEs possible.
+
+Examples:
+    $ condenseseq 1-100x2 2-100x2
+    1-100
+    $ condenseseq 0-100x2 51
+    0-50x2 51 52-100x2
+    $ condenseseq --pad 3 49 0-100x2 51 53
+    000-048x2 049-053 054-100x2
+
+Protip: To pass a negative-number to expandseq WITHOUT it being intepreted
+as a command-line OPTION insert a double-minus ('--') before the
+negative-number, which is a standard technique to deliniate the end
+of command-line options.
+
+positional arguments:
+  FRAME-RANGE           See the definition of 'FRAME-RANGE' above.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --delimiter DELIMITER, -d DELIMITER
+                        List successive numbers delimited by a 'comma',
+                        'space' (default) or a 'newline'.
+  --onlyOnes            only condense sucessive frames, that is, do not list
+                        sequences on 2's, 3's, ... N's
+  --pad PAD             set the padding of the frame numbers to be <PAD>
+                        digits. [default: 1]
+  --error               exit with error if FRAME-RANGE is invalid. (default)
+  --noError             skip invalid FRAME-RANGEs, but print warning
+  --silent, --quiet     suppress all errors and warnings
+
+```
