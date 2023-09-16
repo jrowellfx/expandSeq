@@ -19,7 +19,7 @@ frame-ranges is one of the following three cases:
 to be no larger than B when A < B, or descending
 to be no less than B when A > B.
 
-The above three cases may often be combined to describe
+The above three cases may be combined to describe
 less regular lists of Frame-Ranges by concatenating one
 Frame-Range after another separated by spaces or commas.
 
