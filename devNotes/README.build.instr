@@ -26,10 +26,15 @@ cd tests
 source setUpToTest.sourceMe
 #
 # Then proceed with code-dev, testing the command at will.
-
-run the tests - make sure everthing is OK
+#
+# run the tests - make sure everthing is OK
     and that the version in test_expandseq.out is updated
     for BOTH Darwin (MacOS) and Linux.
+
+# If on Linux, then PUSH up to github, and pull down to macos and test before building
+# and uploading to pypi
+
+# IF on working branch FIRST merge it back to master
 
 python3 -m build
 
@@ -55,6 +60,20 @@ python3 -m twine upload --repository pypi dist/expandseq-x.x.x*
     python3 -m pip install expandSeq
 
 # or update it, append '--upgrade' to either of the above lines.
+
+# Test installation.
+#
+cd tests
+# Make sure using locally installed testing version in venv
+./test_expandseq
+diff test_renum.out test_renum.out.new
+
+# As superuser
+su -
+cd /usr/local/venv
+bin/pip install lsseq --upgrade
+exit
+lsseq --version
 
 CHECK IN AN COMMIT ALL CHANGES AND PUSH UP TO GITHUB
 
