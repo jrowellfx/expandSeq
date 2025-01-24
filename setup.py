@@ -8,7 +8,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name            = 'expandSeq',
-    version         = '3.0.0',
+    version         = '4.0.0',
     description='Command line utils to expose functionality of seqLister python library.',
     long_description=long_description,
     long_description_content_type='text/markdown',
