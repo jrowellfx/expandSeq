@@ -158,7 +158,7 @@ expandseq: warning: invalid FRAME-RANGE: 8-a
 --- Test 31 --- condenseseq ---
 
 --- Test 32 --- condenseseq --version ---
-3.0.0
+4.0.0
 
 --- Test 33 --- condenseseq --help ---
 usage: condenseseq [OPTION]... [FRAME-RANGE]...
