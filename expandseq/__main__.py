@@ -52,7 +52,7 @@ import seqLister
 # MINOR version for added functionality in a backwards compatible manner
 # PATCH version for backwards compatible bug fixes
 #
-VERSION     = "3.0.0"
+VERSION     = "4.0.0"
 
 PROG_NAME = "expandseq"
 
@@ -138,7 +138,7 @@ def main():
     p.add_argument("--error", action="store_true",
         dest="exitOnError", default=True,
         help="exit with error if FRAME-RANGE is invalid. (default)" )
-    p.add_argument("--noError", action="store_false",
+    p.add_argument("--no-error", action="store_false",
         dest="exitOnError",
         help="skip invalid FRAME-RANGEs, but print warning" )
 

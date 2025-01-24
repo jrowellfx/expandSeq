@@ -1,0 +1,2 @@
+1,$ s/--noError/--no-error/g
+1,$ s/--onlyOnes/--only-ones/g

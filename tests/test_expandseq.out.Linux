@@ -6,7 +6,7 @@ Linux
 --- Test 2 --- expandseq ---
 
 --- Test 3 --- expandseq --version ---
-3.0.0
+4.0.0
 
 --- Test 4 --- expandseq --help ---
 usage: expandseq [OPTION]... [FRAME-RANGE]...
@@ -66,7 +66,7 @@ optional arguments:
   --reverse, -r         reverse the order of the list
   --sort, -s            sort the resulting list
   --error               exit with error if FRAME-RANGE is invalid. (default)
-  --noError             skip invalid FRAME-RANGEs, but print warning
+  --no-error            skip invalid FRAME-RANGEs, but print warning
   --silent, --quiet     suppress all errors and warnings
 
 --- Test 5 --- expandseq 1 ---
@@ -148,11 +148,11 @@ expandseq returned non-zero error code: 1
 expandseq: error: invalid FRAME-RANGE: 8-a
 expandseq returned non-zero error code: 1
 
---- Test 29 --- expandseq --noError 1-5 8-a ---
+--- Test 29 --- expandseq --no-error 1-5 8-a ---
 expandseq: warning: invalid FRAME-RANGE: 8-a
 1 2 3 4 5
 
---- Test 30 --- expandseq --silent --noError 1-5 8-a ---
+--- Test 30 --- expandseq --silent --no-error 1-5 8-a ---
 1 2 3 4 5
 
 --- Test 31 --- condenseseq ---
@@ -205,12 +205,12 @@ optional arguments:
   --delimiter DELIMITER, -d DELIMITER
                         List successive numbers delimited by a 'comma',
                         'space' (default) or a 'newline'.
-  --onlyOnes            only condense sucessive frames, that is, do not list
+  --only-ones           only condense sucessive frames, that is, do not list
                         sequences on 2's, 3's, ... N's
   --pad PAD             set the padding of the frame numbers to be <PAD>
                         digits. [default: 1]
   --error               exit with error if FRAME-RANGE is invalid. (default)
-  --noError             skip invalid FRAME-RANGEs, but print warning
+  --no-error            skip invalid FRAME-RANGEs, but print warning
   --silent, --quiet     suppress all errors and warnings
 
 --- Test 34 --- condenseseq 1 ---
@@ -351,9 +351,12 @@ condenseseq returned non-zero error code: 1
 --- Test 77 --- condenseseq --silent 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
 condenseseq returned non-zero error code: 1
 
---- Test 78 --- condenseseq --noError 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
+--- Test 78 --- condenseseq --no-error 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
 condenseseq: warning: 5 invalid FRAME-RANGEs: aaa, bbb, ccc, ... etc.
 1-4 10-20 22-32x2 33-36
 
---- Test 79 --- condenseseq --silent --noError 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
+--- Test 79 --- condenseseq --silent --no-error 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
 1-4 10-20 22-32x2 33-36
+
+--- Test 80 --- condenseseq --silent --no-error --only-ones 1 2 3 4 10-20 22 24 26 28 aaa bbb ccc ddd eee 30 32 33 34 35 36 ---
+1-4 10-20 22 24 26 28 30 32-36

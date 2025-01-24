@@ -117,7 +117,7 @@ def main():
         metavar="DELIMITER",
         default="space",
         help="List successive numbers delimited by a 'comma', 'space' (default) or a 'newline'.")
-    p.add_argument("--onlyOnes", action="store_true",
+    p.add_argument("--only-ones", action="store_true",
         dest="onlyOnes", default=False,
         help="only condense sucessive frames, that is, do not list sequences on 2's, 3's, ... N's")
     p.add_argument("--pad", action="store", type=int,
@@ -128,7 +128,7 @@ def main():
     p.add_argument("--error", action="store_true",
         dest="exitOnError", default=True,
         help="exit with error if FRAME-RANGE is invalid. (default)" )
-    p.add_argument("--noError", action="store_false",
+    p.add_argument("--no-error", action="store_false",
         dest="exitOnError",
         help="skip invalid FRAME-RANGEs, but print warning" )
 
