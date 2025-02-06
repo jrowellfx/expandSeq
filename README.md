@@ -25,7 +25,9 @@ Frame-Range after another separated by spaces or commas.
 
 ## Installing the commands
 
-python3 -m pip install expandSeq
+```
+python3 -m pip install expandSeq --upgrade
+```
 
 ## Testing the installation
 
