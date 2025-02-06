@@ -81,7 +81,7 @@ optional arguments:
   --reverse, -r         reverse the order of the list
   --sort, -s            sort the resulting list
   --error               exit with error if FRAME-RANGE is invalid. (default)
-  --noError             skip invalid FRAME-RANGEs, but print warning
+  --no-error             skip invalid FRAME-RANGEs, but print warning
   --silent, --quiet     suppress all errors and warnings
 ```
 
@@ -115,12 +115,12 @@ optional arguments:
   --delimiter DELIMITER, -d DELIMITER
                         List successive numbers delimited by a 'comma',
                         'space' (default) or a 'newline'.
-  --onlyOnes            only condense sucessive frames, that is, do not list
+  --only-ones            only condense sucessive frames, that is, do not list
                         sequences on 2's, 3's, ... N's
   --pad PAD             set the padding of the frame numbers to be <PAD>
                         digits. [default: 1]
   --error               exit with error if FRAME-RANGE is invalid. (default)
-  --noError             skip invalid FRAME-RANGEs, but print warning
+  --no-error             skip invalid FRAME-RANGEs, but print warning
   --silent, --quiet     suppress all errors and warnings
 
 ```
