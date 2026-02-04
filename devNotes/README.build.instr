@@ -71,9 +71,9 @@ diff test_renum.out test_renum.out.new
 # As superuser
 su -
 cd /usr/local/venv
-bin/pip install lsseq --upgrade
+bin/pip install expandSeq --upgrade
 exit
-lsseq --version
+expandseq --version
 
 CHECK IN AN COMMIT ALL CHANGES AND PUSH UP TO GITHUB
 
