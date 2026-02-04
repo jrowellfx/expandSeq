@@ -158,10 +158,10 @@ expandseq: warning: invalid FRAME-RANGE: 8-a
 --- Test 31 --- condenseseq ---
 
 --- Test 32 --- condenseseq --version ---
-4.0.0
+4.0.1
 
 --- Test 33 --- condenseseq --help ---
-usage: condenseseq [OPTION]... [FRAME-RANGE]...
+usage: condenseseq [-h | --help] [OPTION]... [FRAME-RANGE]...
 
 Given a list of FRAME-RANGEs condense the fully expanded list into
 the most succinct list of FRAME-RANGEs possible.
