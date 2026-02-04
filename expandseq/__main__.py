@@ -52,7 +52,7 @@ import seqLister
 # MINOR version for added functionality in a backwards compatible manner
 # PATCH version for backwards compatible bug fixes
 #
-VERSION     = "4.0.0"
+VERSION     = "4.0.1"
 
 PROG_NAME = "expandseq"
 
@@ -115,7 +115,7 @@ def main():
 
             (Also see condenseseq).
             '''),
-        usage="%(prog)s [OPTION]... [FRAME-RANGE]...")
+        usage="%(prog)s [-h | --help] [OPTION]... [FRAME-RANGE]...")
 
     p.add_argument("--version", action="version", version=VERSION)
     p.add_argument("--delimiter", "-d", action="store", type=str,
