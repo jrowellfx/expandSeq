@@ -6,10 +6,10 @@ Darwin
 --- Test 2 --- expandseq ---
 
 --- Test 3 --- expandseq --version ---
-4.0.0
+4.0.1
 
 --- Test 4 --- expandseq --help ---
-usage: expandseq [OPTION]... [FRAME-RANGE]...
+usage: expandseq [-h | --help] [OPTION]... [FRAME-RANGE]...
 
 Expands a list of FRAME-RANGEs into a list of integers.  A FRAME-RANGE
 is a simple syntax widely used within the VFX-industry for specifying a
