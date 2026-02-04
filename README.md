@@ -43,7 +43,7 @@ You should be able to run the following commands and get this output.
 ## expandseq
 
 ```
-expandseq [OPTION]... [FRAME-RANGE]...
+expandseq [-h | --help] [OPTION]... [FRAME-RANGE]...
 
 Expands a list of FRAME-RANGEs into a list of integers.
 
@@ -88,7 +88,7 @@ optional arguments:
 ## condenseseq
 
 ```
-condenseseq [OPTION]... [FRAME-RANGE]...
+condenseseq [-h | --help] [OPTION]... [FRAME-RANGE]...
 
 Given a list of FRAME-RANGEs condense the fully expanded list into
 the most succinct list of FRAME-RANGEs possible.
